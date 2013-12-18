@@ -1,10 +1,11 @@
 use Modern::Perl;
 use autodie;
+our $VERSION = 0.01;
 die "MSVC not present!" unless exists $ENV{VCINSTALLDIR};
 
-my $dll = shift;
-my $lib  = shift // $dll;	$lib =~ s/dll$/lib/i;
-my $def  = $lib;						$def =~ s/lib$/def/i;
+my $dll = shift // say "usage: $0 the\\famous\\dll\\path\\filename.dll [output_library_path\\filename.lib]" and exit(-1);
+my $lib = shift // $dll;	$lib =~ s/dll$/lib/i;
+my $def = $lib;						$def =~ s/lib$/def/i;
 
 say "dll: $dll";
 die "File not found!" unless -e $dll;
@@ -23,6 +24,6 @@ my $res = `lib /nologo /def:"$def" /OUT:"$lib"`;
 if($?){
 	say "something were wrong:";
 	say "\t\$?: $?";
-	say "\tres: $res";
+	say "\t\$res: $res";
 }
 unlink $def;
